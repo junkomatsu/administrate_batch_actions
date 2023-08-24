@@ -1,5 +1,6 @@
 const init = function() {
   var buttons = document.querySelectorAll("[data-batch-action-option='button']");
+  var hybridButtons = document.querySelectorAll("[data-batch-action-option='hybrid-button']");
   var checkboxes = document.querySelectorAll("[data-batch-action-option='checkbox']");
   var selectAllCheckboxes = document.querySelector("[data-batch-action-option='select_all']");
 
@@ -25,7 +26,27 @@ const init = function() {
 
     buttons.forEach(function(button){
       button.addEventListener('click', function(event){
-        button.href += '?' + selectedItemIds()
+        const url = new URL(button.href)
+        url.searchParams.delete('batch_action_ids[]')
+        checkboxes.forEach((checkbox) => {
+          if (checkbox.checked) {
+            url.searchParams.append('batch_action_ids[]', checkbox.value)
+          }
+        })
+        button.href = url.toString();
+      });
+    });
+
+    hybridButtons.forEach(function(button){
+      button.addEventListener('click', function(event){
+        const url = new URL(button.href)
+        url.searchParams.delete('batch_action_ids[]')
+        checkboxes.forEach((checkbox) => {
+          if (checkbox.checked) {
+            url.searchParams.append('batch_action_ids[]', checkbox.value)
+          }
+        })
+        button.href = url.toString();
       });
     });
 
